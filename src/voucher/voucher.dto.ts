@@ -19,4 +19,5 @@ export interface VoucherDto {
   customer_id: string;
   offer_id: string;
   expired_at: string;
+  is_used?: boolean;
 }
