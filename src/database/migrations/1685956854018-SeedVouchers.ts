@@ -5,17 +5,19 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class SeedVouchers1685956854018 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const customer = await this.seedCustomer(queryRunner);
+    const customers = await this.seedCustomer(queryRunner);
     const offers = await this.seedOffers(queryRunner);
 
     const generatedVouchers = new Set<string>();
     await Promise.all(
-      offers.map(async (offer) => {
-        return queryRunner.manager.insert(Voucher, {
-          customerId: customer.id,
-          offerId: offer.id,
-          code: this.generateUniqueString(generatedVouchers, 8),
-          expiresAt: new Date('2023-12-12'),
+      customers.map(async (customer) => {
+        offers.map(async (offer) => {
+          return queryRunner.manager.insert(Voucher, {
+            customerId: customer.id,
+            offerId: offer.id,
+            code: this.generateUniqueString(generatedVouchers, 8),
+            expiresAt: new Date('2023-12-12'),
+          });
         });
       }),
     );
@@ -26,10 +28,11 @@ export class SeedVouchers1685956854018 implements MigrationInterface {
     //
   }
 
-  private async seedCustomer(queryRunner: QueryRunner): Promise<Customer> {
-    const customer = queryRunner.manager.create(Customer, {
-      email: 'test@test.com',
-    });
+  private async seedCustomer(queryRunner: QueryRunner): Promise<Customer[]> {
+    const customer = queryRunner.manager.create(Customer, [
+      { email: 'test@test.com' },
+      { email: 'test2@test.com' },
+    ]);
 
     return queryRunner.manager.save(Customer, customer);
   }

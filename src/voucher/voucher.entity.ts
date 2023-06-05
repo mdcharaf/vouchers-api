@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Offer } from '../offer/offer.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'customer_vouchers' })
 export class Voucher {
@@ -13,6 +20,10 @@ export class Voucher {
 
   @Column({ name: 'offer_id' })
   offerId: number;
+
+  @ManyToOne(() => Offer, (of) => of.vouchers, { eager: true })
+  @JoinColumn({ name: 'offer_id' })
+  offer?: Offer;
 
   @Column({ name: 'expires_at' })
   expiresAt: Date;

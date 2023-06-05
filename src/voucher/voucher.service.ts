@@ -19,26 +19,9 @@ export class VoucherService {
     private readonly offerService: OfferService,
   ) {}
 
-  async createVoucher(voucher: Partial<Voucher>): Promise<Voucher> {
-    if (voucher.expiresAt <= new Date()) {
-      throw new BadRequestException('Invalid voucher expiration date');
-    }
+  async redeemVoucher(code: string, email: string): Promise<Voucher> {
+    const customer = await this.customerService.findCustomer({ email });
 
-    const customer = await this.customerService.findCustomer(
-      voucher.customerId,
-    );
-    const offer = await this.offerService.findOffer(voucher.offerId);
-
-    const result = await this.voucherRepo.save({
-      customerId: customer.id,
-      offerId: offer.id,
-      expiresAt: voucher.expiresAt,
-    });
-
-    return result;
-  }
-
-  async redeemVoucher(id: string): Promise<Voucher> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -48,7 +31,10 @@ export class VoucherService {
         .createQueryBuilder(Voucher, 'voucher')
         .useTransaction(true)
         .setLock('pessimistic_write')
-        .where('id = :id', { id })
+        .where('code = :code AND customer_id = :customerId', {
+          code,
+          customerId: customer.id,
+        })
         .getOne();
 
       if (!voucher) {
@@ -64,13 +50,17 @@ export class VoucherService {
         throw new BadRequestException('Voucher has already been redeemed');
       }
 
-      const res = await queryRunner.manager.save(Voucher, {
-        ...voucher,
-        usedAt: now,
-      });
-
+      await queryRunner.manager.update(
+        Voucher,
+        { id: voucher.id },
+        { usedAt: now },
+      );
       await queryRunner.commitTransaction();
-      return res;
+
+      return await this.voucherRepo.findOne({
+        where: { id: voucher.id },
+        relations: { offer: true },
+      });
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

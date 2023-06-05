@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Voucher } from '../voucher/voucher.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'offers' })
 export class Offer {
@@ -10,4 +11,7 @@ export class Offer {
 
   @Column()
   percentage: number;
+
+  @OneToMany(() => Voucher, (v) => v.offer)
+  vouchers?: Promise<Voucher[]>;
 }

@@ -10,10 +10,10 @@ export class CustomerService {
     private readonly repo: Repository<Customer>,
   ) {}
 
-  async findCustomer(id: number): Promise<Customer> {
-    const customer = this.repo.findOneBy({ id });
+  async findCustomer(critieria: Partial<Customer>): Promise<Customer> {
+    const customer = this.repo.findOneBy(critieria);
     if (!customer) {
-      throw new NotFoundException(`customer ${id} not found`);
+      throw new NotFoundException(`customer not found`);
     }
 
     return customer;
