@@ -15,7 +15,8 @@ export class CreateVoucherDto {
 }
 
 export interface VoucherDto {
-  id: string;
+  id: number;
+  code: string;
   customer_id: string;
   offer_id: string;
   expired_at: string;

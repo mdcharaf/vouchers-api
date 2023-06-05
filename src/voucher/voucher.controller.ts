@@ -16,6 +16,7 @@ export class VoucherController {
 
     return {
       id: voucher.id,
+      code: voucher.code,
       customer_id: voucher.offerId.toString(),
       offer_id: voucher.offerId.toString(),
       expired_at: voucher.expiresAt.toString(),
@@ -28,6 +29,7 @@ export class VoucherController {
 
     return {
       id: voucher.id,
+      code: voucher.code,
       customer_id: voucher.offerId.toString(),
       offer_id: voucher.offerId.toString(),
       expired_at: voucher.expiresAt.toString(),

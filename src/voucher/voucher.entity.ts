@@ -2,8 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'customer_vouchers' })
 export class Voucher {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  code: string;
 
   @Column({ name: 'customer_id' })
   customerId: number;

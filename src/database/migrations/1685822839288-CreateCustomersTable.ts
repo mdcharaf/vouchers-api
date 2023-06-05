@@ -17,6 +17,7 @@ export class CreateCustomersTable1685822839288 implements MigrationInterface {
             name: 'email',
             type: 'varchar',
             isNullable: false,
+            isUnique: true,
           },
           {
             name: 'created_at',

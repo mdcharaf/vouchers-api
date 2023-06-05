@@ -8,9 +8,16 @@ export class CreateVouchersTable1685822854319 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'int',
             isPrimary: true,
-            generationStrategy: 'uuid',
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'code',
+            type: 'varchar',
+            isUnique: true,
+            isNullable: false,
           },
           {
             name: 'customer_id',
