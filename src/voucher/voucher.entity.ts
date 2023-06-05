@@ -1,3 +1,4 @@
+import { Customer } from 'src/customer/customer.entity';
 import { Offer } from '../offer/offer.entity';
 import {
   Column,
@@ -17,6 +18,10 @@ export class Voucher {
 
   @Column({ name: 'customer_id' })
   customerId: number;
+
+  @ManyToOne(() => Customer, (c) => c.vouchers, { eager: true })
+  @JoinColumn({ name: 'customer_id' })
+  customer?: Customer;
 
   @Column({ name: 'offer_id' })
   offerId: number;
