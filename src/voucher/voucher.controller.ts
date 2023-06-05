@@ -1,8 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { RedeemVoucherDto, VoucherDto } from './voucher.dto';
 import { VoucherService } from './voucher.service';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('v1/voucher')
+@UseGuards(ThrottlerGuard)
 export class VoucherController {
   constructor(private readonly voucherService: VoucherService) {}
 
