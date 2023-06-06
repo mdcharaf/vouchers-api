@@ -1,4 +1,4 @@
-import { Customer } from 'src/customer/customer.entity';
+import { Customer } from '../customer/customer.entity';
 import { Offer } from '../offer/offer.entity';
 import {
   Column,

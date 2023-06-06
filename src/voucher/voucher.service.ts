@@ -7,7 +7,6 @@ import { Voucher } from './voucher.entity';
 import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerService } from '../customer/customer.service';
-import { OfferService } from '../offer/offer.service';
 
 @Injectable()
 export class VoucherService {
@@ -16,7 +15,6 @@ export class VoucherService {
     private readonly voucherRepo: Repository<Voucher>,
     private readonly dataSource: DataSource,
     private readonly customerService: CustomerService,
-    private readonly offerService: OfferService,
   ) {}
 
   async redeemVoucher(code: string, email: string): Promise<Voucher> {
